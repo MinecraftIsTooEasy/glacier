@@ -4,6 +4,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import huix.glacier.api.extension.creativetab.GlacierCreativeTabs;
 import net.minecraft.*;
 import net.xiaoyu233.fml.util.ReflectHelper;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.*;
@@ -23,18 +24,30 @@ public class GuiContainerCreativeMixin extends InventoryEffectRenderer {
     private int maxPages = 0;
 
 
-    @Redirect(method = "initGui", at = @At(value = "INVOKE", target = "Lnet/minecraft/GuiContainerCreative;setCurrentCreativeTab(Lnet/minecraft/CreativeTabs;)V"))
-    private void redirectInitGui(GuiContainerCreative instance, CreativeTabs var8, @Local(name = "var1") int var1) {
-        this.setCurrentCreativeTab(GlacierCreativeTabs.newCreativeTabArray.get(var1));
-    }
-
-    @Inject(method = "initGui", at = @At(value = "INVOKE", target = "Lnet/minecraft/Container;addCraftingToCrafters(Lnet/minecraft/ICrafting;)V", shift = At.Shift.AFTER))
-    private void injectGui(CallbackInfo ci) {
-        int tabCount = GlacierCreativeTabs.newCreativeTabArray.size();
-        if (tabCount > 12) {
-            buttonList.add(new GuiButton(101, guiLeft,              guiTop - 50, 20, 20, "<"));
-            buttonList.add(new GuiButton(102, guiLeft + xSize - 20, guiTop - 50, 20, 20, ">"));
-            maxPages = ((tabCount - 12) / 10) + 1;
+    @Overwrite
+    public void initGui() {
+        if (this.mc.playerController.isInCreativeMode()) {
+            super.initGui();
+            this.buttonList.clear();
+            Keyboard.enableRepeatEvents(true);
+            this.searchField = new GuiTextField(this.fontRenderer, this.guiLeft + 82, this.guiTop + 6, 89, this.fontRenderer.FONT_HEIGHT);
+            this.searchField.setMaxStringLength(15);
+            this.searchField.setEnableBackgroundDrawing(false);
+            this.searchField.setVisible(false);
+            this.searchField.setTextColor(16777215);
+            int var1 = selectedTabIndex;
+            selectedTabIndex = -1;
+            this.setCurrentCreativeTab(GlacierCreativeTabs.newCreativeTabArray.get(var1));
+            this.field_82324_x = new CreativeCrafting(this.mc);
+            this.mc.thePlayer.inventoryContainer.addCraftingToCrafters(this.field_82324_x);
+            int tabCount = GlacierCreativeTabs.newCreativeTabArray.size();
+            if (tabCount > 12) {
+                buttonList.add(new GuiButton(101, guiLeft,              guiTop - 50, 20, 20, "<"));
+                buttonList.add(new GuiButton(102, guiLeft + xSize - 20, guiTop - 50, 20, 20, ">"));
+                maxPages = ((tabCount - 12) / 10) + 1;
+            }
+        } else {
+            this.mc.displayGuiScreen(new GuiInventory(this.mc.thePlayer));
         }
     }
 
