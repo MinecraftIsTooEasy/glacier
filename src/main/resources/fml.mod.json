@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "glacier",
+  "version": "${version}",
+  "name": "Glacier",
+  "description": "glacier api!",
+  "authors": ["Huix"],
+  "entrypoints": {
+    "registry": ["huix.glacier.init.RegistryInit"],
+    "main": ["huix.glacier.init.PostInit"]
+  },
+  "depends": {
+    "fishmodloader": ">=3.3.0"
+  },
+  "environment": "*",
+  "mixins": [
+    "glacier.mixins.json"
+  ],
+  "accessWidener": "glacier.accesswidener",
+  "custom": {
+    "loom:injected_interfaces": {
+      "net/minecraft/CreativeTabs": ["huix/glacier/api/extension/creativetab/ICreativeTabs"]
+    }
+  }
+}
+
