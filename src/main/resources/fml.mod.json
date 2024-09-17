@@ -7,6 +7,7 @@
   "authors": ["Huix"],
   "entrypoints": {
     "registry": ["huix.glacier.init.RegistryInit"],
+    "preLaunch": ["huix.glacier.api.registry.RegistrySyncEarlyInitializer"],
     "main": ["huix.glacier.init.PostInit"]
   },
   "depends": {

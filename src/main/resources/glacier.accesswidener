@@ -17,3 +17,5 @@ accessible method net/minecraft/Item <init> (ILnet/minecraft/Material;Ljava/lang
 accessible method net/minecraft/Item <init> ()V
 accessible method net/minecraft/Item <init> (ILjava/lang/String;)V
 accessible method net/minecraft/Item <init> (I[Lnet/minecraft/Material;Ljava/lang/String;)V
+
+accessible field net/minecraft/NBTTagCompound tagMap Ljava/util/Map;
